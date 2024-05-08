@@ -5,9 +5,11 @@ import "./App.css";
 import AdminPanel from "./views/adminPage";
 import React, { useState, useEffect } from "react";
 
+import products from './data/products';
+
 let productsList = JSON.parse(localStorage.getItem("products"));
 if (!productsList) {
-  productsList = require("../data/products").default;
+  productsList = products;
 }
 
 function App() {

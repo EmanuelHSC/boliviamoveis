@@ -1,0 +1,43 @@
+const users = [
+    {
+        id: 1,
+        name: 'emanuel',
+        email: 'emanuel@gmail.com',
+        password: '123456',
+        isAdmin: true,
+        endereco: 'Rua 1, 123',
+        cidade: 'Espirito Santo',
+        cep: '29100000',
+        pais: 'Brasil',
+        telefone: '27999999999',
+        cpf: '12345678900',
+    },
+    {
+        id: 2,
+        name: 'joao',
+        email: 'joao@gmail.com',
+        password: '123456',
+        isAdmin: false,
+        endereco: 'Rua 2, 123',
+        cidade: 'São Paulo',
+        cep: '01100000',
+        pais: 'Brasil',
+        telefone: '11999999999',
+        cpf: '12345678901',
+    },
+    {
+        id: 3,
+        name: 'maria',
+        email: 'maria@gmail.com',
+        password: '123456',
+        isAdmin: false,
+        endereco: 'Rua 3, 123',
+        cidade: 'Rio de Janeiro',
+        cep: '20000000',
+        pais: 'Brasil',
+        telefone: '21999999999',
+        cpf: '12345678902',
+    },
+];
+
+export default users;

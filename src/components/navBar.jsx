@@ -1,13 +1,17 @@
-import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { styled, alpha } from "@mui/material/styles";
+import { createTheme, ThemeProvider, styled, alpha } from "@mui/material/styles";
+import PersonIcon from "@mui/icons-material/Person";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import HomeIcon from "@mui/icons-material/Home";
+import IconButton from "@mui/material/IconButton";
+import { Typography } from "@mui/material";
+
+import React from "react";
+import { Link } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -27,19 +31,19 @@ const Search = styled("div")(({ theme }) => ({
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#000000", // cor preta
+      main: "#000000",
     },
     text: {
-      primary: "#ffffff", // cor branca
+      primary: "#ffffff",
     },
   },
 });
 
 const StyledToolbar = styled(Toolbar)({
-  minHeight: "50px", // Defina a altura mínima desejada aqui
+  minHeight: "50px", 
   display: "flex",
-  justifyContent: "space-between", // Distribui o espaço uniformemente entre os itens
-  alignItems: "center", // Alinha os itens verticalmente no centro
+  justifyContent: "space-between", 
+  alignItems: "center", 
 });
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
@@ -55,23 +59,44 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 2), // Aumentar o padding horizontal
+    padding: theme.spacing(1, 2), 
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: "all 0.3s ease",
-    width: "100%", // Manter largura adaptável
+    width: "100%", 
     [theme.breakpoints.up("md")]: {
-      width: "30ch", // Aumentar a largura fixa em telas maiores
+      width: "30ch", 
     },
   },
 }));
 
 export default function NavBar() {
+  const handleHomeClick = () => {
+    console.log("Home Clicked!");
+  };
+
+  const handleFavoritesClick = () => {
+    console.log("Favorites Clicked!");
+  };
+
+  const handleCartClick = () => {
+    console.log("Shopping Cart Clicked!");
+  };
+
+  const handleProfileClick = () => {
+    console.log("Profile Clicked!");
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="static" color="primary">
         <StyledToolbar>
+          <Link to="/">
+            <IconButton color="inherit" onClick={handleHomeClick}>
+              <HomeIcon />
+            </IconButton>
+          </Link>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, display: { xs: "none", sm: "block" }, fontSize: "1.25rem" }} color="textPrimary">
-            Bolívia Móveis
+            Bolivia Móveis
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -79,7 +104,17 @@ export default function NavBar() {
             </SearchIconWrapper>
             <StyledInputBase placeholder="Busque aqui seu produto..." inputProps={{ "aria-label": "search" }} />
           </Search>
-          <div style={{ flexGrow: 1 }} /> {/* Para manter o equilíbrio visual */}
+          <div>
+            <IconButton color="inherit" onClick={handleFavoritesClick}>
+              <FavoriteIcon />
+            </IconButton>
+            <IconButton color="inherit" onClick={handleCartClick}>
+              <ShoppingCartIcon />
+            </IconButton>
+            <IconButton color="inherit" onClick={handleProfileClick}>
+              <PersonIcon />
+            </IconButton>
+          </div>
         </StyledToolbar>
       </AppBar>
     </ThemeProvider>

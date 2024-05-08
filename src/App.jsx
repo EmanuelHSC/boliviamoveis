@@ -1,12 +1,18 @@
-import NavBar from '../src/components/navBar'; // Ajuste o caminho conforme a localização do seu arquivo
-import './App.css'
+import NavBar from "../src/components/navBar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
 
 function App() {
   return (
-    <div>
-      <NavBar />
-      {/* Outros componentes da sua aplicação */}
-    </div>
+    <Router>
+      <div>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<ProductList products={products} />} />
+          <Route path="/admin" element={<AdminPanel />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

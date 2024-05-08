@@ -9,7 +9,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import HomeIcon from "@mui/icons-material/Home";
 import IconButton from "@mui/material/IconButton";
 import { Typography } from "@mui/material";
-
+import ProfileMenu from "./profileMenu";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -21,8 +21,8 @@ const Search = styled("div")(({ theme }) => ({
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginLeft: 0,
-  width: "auto", // Definir largura como automática para ocupar espaço disponível
-  minWidth: 500, // Definir um tamanho mínimo
+  width: "auto",
+  minWidth: 500,
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(1),
   },
@@ -40,10 +40,10 @@ const theme = createTheme({
 });
 
 const StyledToolbar = styled(Toolbar)({
-  minHeight: "50px", 
+  minHeight: "50px",
   display: "flex",
-  justifyContent: "space-between", 
-  alignItems: "center", 
+  justifyContent: "space-between",
+  alignItems: "center",
 });
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
@@ -59,12 +59,12 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 2), 
+    padding: theme.spacing(1, 2),
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: "all 0.3s ease",
-    width: "100%", 
+    width: "100%",
     [theme.breakpoints.up("md")]: {
-      width: "30ch", 
+      width: "30ch",
     },
   },
 }));
@@ -111,9 +111,9 @@ export default function NavBar() {
             <IconButton color="inherit" onClick={handleCartClick}>
               <ShoppingCartIcon />
             </IconButton>
-            <IconButton color="inherit" onClick={handleProfileClick}>
+            <ProfileMenu color="inherit" onClick={handleProfileClick}>
               <PersonIcon />
-            </IconButton>
+            </ProfileMenu>
           </div>
         </StyledToolbar>
       </AppBar>

@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
+import RegisterModal from "./registerModal";
 import LoginModal from "./loginModal";
+import ResetPasswordModal from "./resetPassowordModal";
 import usersData from "../data/users";
 import { Link } from "react-router-dom";
 
 function ProfileMenu() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [user, setUser] = useState({ isLoggedIn: false, name: "Usuário", isAdmin: false });
+  const [modalOpen, setModalOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [resetPasswordModalOpen, setResetPasswordModalOpen] = useState(false);
   const [users, setUsers] = useState(usersData);
 
   const handleClick = (event) => {
@@ -20,6 +24,22 @@ function ProfileMenu() {
   };
 
   //Reset Password
+
+  const handleResetPasswordOpen = () => {
+    setResetPasswordModalOpen(true);
+    handleClose();
+  };
+
+  const handleResetPasswordClose = () => {
+    setResetPasswordModalOpen(false);
+  };
+
+  const handleResetPassword = (email, newPassword) => {
+    const updatedUsers = users.map((user) => (user.email === email ? { ...user, password: newPassword } : user));
+    setUsers(updatedUsers);
+    console.log("Senha alterada para o usuário:", email);
+    handleResetPasswordClose();
+  };
 
   //Login
 
@@ -46,6 +66,22 @@ function ProfileMenu() {
   };
 
   //Register
+
+  const handleRegisterOpen = () => {
+    setModalOpen(true);
+    handleClose();
+  };
+
+  const handleRegisterClose = () => {
+    setModalOpen(false);
+  };
+
+  const handleRegister = (newUser) => {
+    const updatedUsers = [...users, { ...newUser, id: users.length + 1 }];
+    setUsers(updatedUsers);
+    handleRegisterClose();
+    console.log("Usuários atualizados:", updatedUsers);
+  };
 
   //logout
 
@@ -77,10 +113,18 @@ function ProfileMenu() {
             <MenuItem key="login" onClick={handleLoginOpen} sx={{ minHeight: "4rem" }} style={{ fontSize: "1rem", color: "black" }}>
               Entrar
             </MenuItem>
+            <MenuItem key="register" onClick={handleRegisterOpen} sx={{ minHeight: "4rem" }} style={{ fontSize: "1rem", color: "black" }}>
+              Registrar
+            </MenuItem>
+            <MenuItem key="resetPassword" onClick={handleResetPasswordOpen} sx={{ minHeight: "4rem" }} style={{ fontSize: "1rem", color: "black" }}>
+              Trocar Senha
+            </MenuItem>
           </>
         )}
       </Menu>
+      <RegisterModal open={modalOpen} onClose={handleRegisterClose} onRegister={handleRegister} />
       <LoginModal open={loginModalOpen} onClose={handleLoginClose} onLogin={handleLogin} />
+      <ResetPasswordModal open={resetPasswordModalOpen} onClose={handleResetPasswordClose} onResetPassword={handleResetPassword} />
     </>
   );
 }

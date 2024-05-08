@@ -1,8 +1,14 @@
 import NavBar from "../src/components/navBar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ProductList from "../src/views/productList";
 import "./App.css";
 import AdminPanel from "./views/adminPage";
 import React, { useState, useEffect } from "react";
+
+let productsList = JSON.parse(localStorage.getItem("products"));
+if (!productsList) {
+  productsList = require("../data/products").default;
+}
 
 function App() {
   const [products, setProducts] = useState([]);

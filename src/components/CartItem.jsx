@@ -7,16 +7,23 @@ import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import Input from '@mui/material/Input';
 import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Creators as CartActions } from '../store/ducks/cart'
 
-export default function CartItem() {
-    const [ qtd, setQtd ] = useState(0);
-    const [ price, setPrice ] = useState(100);
+export default function CartItem({ id }) {
+    const dispatch = useDispatch();
+    const item = useSelector((state) => state.cart.items.find(item => item.id === id));
+
     const handleAddQtd = () => {
-        setQtd(qtd + 1);
+        dispatch(CartActions.addToCart(item));
+    }
+
+    const setNewQuantity = (newQuantity) => {
+        dispatch(CartActions.updateQuantity({ item, quantity: newQuantity }));
     }
 
     const handleSubQtd = () => {
-        if(qtd > 0) setQtd(qtd - 1);
+        dispatch(CartActions.removeFromCart(item));
         // se nao, remover item do carrinho
     }
 
@@ -25,13 +32,13 @@ export default function CartItem() {
         <CardMedia
         component="img"
         sx={{ width: 151 }}
-        image="https://moveiseeletrofriburgo.vteximg.com.br/arquivos/ids/172993-1000-1000/922-fundo-branco.jpg?v=638234741212530000"
-        alt="Live from space album cover"
+        image={item.image}
+        alt="Product image"
         />
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <CardContent sx={{ flex: '1 0 auto', justifyContent: 'space-between' }}>
             <Typography component="div" variant="h6">
-                Nome do produto
+                {item.name}
             </Typography>
             <Container sx={{ m: 0, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
             <Button
@@ -51,7 +58,8 @@ export default function CartItem() {
                 </Button>
                 <Input sx={{width: 30, }} 
                 inputProps={{ style: { textAlign: 'center' } }}
-                defaultValue={ qtd } value={qtd} onChange={(e) => setQtd(e.target.value)}
+                defaultValue={ item.quantity } value={item.quantity} onChange={(e) => setNewQuantity(e.target.value)}
+                key={id}
                 >
                 </Input>
                 <Button
@@ -72,11 +80,8 @@ export default function CartItem() {
                 </Button>
             </Container>
             <Typography variant="h6" sx={{fontWeight: 'bold', marginTop: 2 }} component="div">
-                R$ {price.toFixed(2)}
+                R$ {item.price}
             </Typography>
-            {/* <Typography variant="subtitle1" color="text.secondary" component="div">
-                Valor sem desconto
-            </Typography> */}
         </CardContent>
                     </Box>
 

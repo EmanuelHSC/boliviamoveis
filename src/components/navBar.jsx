@@ -12,6 +12,8 @@ import { Typography } from "@mui/material";
 import ProfileMenu from "./profileMenu";
 import React from "react";
 import { Link } from "react-router-dom";
+import Badge from "@mui/material/Badge";
+import { useSelector } from "react-redux";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -85,6 +87,8 @@ const HoverableProfileMenu = styled(ProfileMenu)(({ theme }) => ({
 }));
 
 export default function NavBar() {
+  const quantityCart = useSelector((state) => state.cart.qtd);
+
   const handleHomeClick = () => {
     console.log("Home Clicked!");
   };
@@ -123,9 +127,12 @@ export default function NavBar() {
             <HoverableIconButton color="inherit" onClick={handleFavoritesClick}>
               <FavoriteIcon />
             </HoverableIconButton>
+            
               <Link to="/carrinho" style={{ textDecoration: "none", color: "inherit" }}>
             <HoverableIconButton color="inherit" onClick={handleCartClick}>
-              <ShoppingCartIcon />
+            <Badge badgeContent={quantityCart ? quantityCart : "0"}>
+  <ShoppingCartIcon />
+</Badge>
             </HoverableIconButton>
               </Link>
             <HoverableProfileMenu color="inherit" onClick={handleProfileClick}>

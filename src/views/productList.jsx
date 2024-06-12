@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const StyledCard = styled(Card)({
   height: "calc(100vh - 64px)",
@@ -52,7 +53,7 @@ function ProductList({ products: productsProp }) {
       <Grid container spacing={2} sx={{ padding: 2 }}>
         {currentItems.map((product, index) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
-            <ProductCard name={product.name} description={product.description} image={product.image} price={product.price} />
+            <ProductCard name={product.name} description={product.description} image={product.image} price={product.price} id={product.id} />
           </Grid>
         ))}
       </Grid>

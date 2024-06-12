@@ -21,6 +21,7 @@ const Search = styled("div")(({ theme }) => ({
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginLeft: 0,
+  marginRight: 8,
   width: "auto",
   minWidth: 500,
   [theme.breakpoints.up("sm")]: {
@@ -69,6 +70,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+const HoverableIconButton = styled(IconButton)(({ theme }) => ({
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.grey[700], 0.35),
+    transition: "background-color 0.3s",
+  },
+}));
+
+const HoverableProfileMenu = styled(ProfileMenu)(({ theme }) => ({
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.grey[700], 0.35),
+    transition: "background-color 0.3s",
+  },
+}));
+
 export default function NavBar() {
   const handleHomeClick = () => {
     console.log("Home Clicked!");
@@ -105,15 +120,17 @@ export default function NavBar() {
             <StyledInputBase placeholder="Busque aqui seu produto..." inputProps={{ "aria-label": "search" }} />
           </Search>
           <div>
-            <IconButton color="inherit" onClick={handleFavoritesClick}>
+            <HoverableIconButton color="inherit" onClick={handleFavoritesClick}>
               <FavoriteIcon />
-            </IconButton>
-            <IconButton color="inherit" onClick={handleCartClick}>
+            </HoverableIconButton>
+              <Link to="/carrinho" style={{ textDecoration: "none", color: "inherit" }}>
+            <HoverableIconButton color="inherit" onClick={handleCartClick}>
               <ShoppingCartIcon />
-            </IconButton>
-            <ProfileMenu color="inherit" onClick={handleProfileClick}>
+            </HoverableIconButton>
+              </Link>
+            <HoverableProfileMenu color="inherit" onClick={handleProfileClick}>
               <PersonIcon />
-            </ProfileMenu>
+            </HoverableProfileMenu>
           </div>
         </StyledToolbar>
       </AppBar>

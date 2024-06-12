@@ -10,7 +10,7 @@ function ProductCard({ name = "Default Name", description = "Default Description
 
   return (
     <Card sx={{ maxWidth: 345, m: 2 }}>
-      <CardMedia component="img" height="140" image={image || "https://via.placeholder.com/150"} alt={name} />
+      <CardMedia component="img" sx={{ height: "100%" }} image={image || "https://via.placeholder.com/150"} alt={name} />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {name}

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProductList from "../src/views/productList";
 import "./App.css";
 import AdminPanel from "./views/adminPage";
+import Cart from "./views/cart";
 import React, { useState, useEffect } from "react";
 
 let productsList = JSON.parse(localStorage.getItem("products"));
@@ -34,6 +35,7 @@ function App() {
         <Routes>
           <Route path="/" element={<ProductList products={products} />} />
           <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/carrinho" element={<Cart />} />
         </Routes>
       </div>
     </Router>

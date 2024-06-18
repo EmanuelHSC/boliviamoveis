@@ -35,10 +35,10 @@ function RegisterModal({ open, onClose, onRegister }) {
         <TextField margin="dense" label="Senha" type="password" fullWidth variant="outlined" name="password" value={formData.password} onChange={handleChange} InputProps={{ style: { color: '#000' } }} />
         <TextField margin="dense" label="Endereço" type="text" fullWidth variant="outlined" name="endereco" value={formData.endereco} onChange={handleChange} InputProps={{ style: { color: '#000' } }} />
         <TextField margin="dense" label="Cidade" type="text" fullWidth variant="outlined" name="cidade" value={formData.cidade} onChange={handleChange} InputProps={{ style: { color: '#000' } }} />
-        <TextField margin="dense" label="CEP" type="text" fullWidth variant="outlined" name="cep" value={formData.cep} onChange={handleChange} InputProps={{ style: { color: '#000' } }} />
+        <TextField margin="dense" label="CEP" type="number" fullWidth variant="outlined" name="cep" value={formData.cep} onChange={handleChange} InputProps={{ style: { color: '#000' } }} />
         <TextField margin="dense" label="País" type="text" fullWidth variant="outlined" name="pais" value={formData.pais} onChange={handleChange} InputProps={{ style: { color: '#000' } }} />
-        <TextField margin="dense" label="Telefone" type="text" fullWidth variant="outlined" name="telefone" value={formData.telefone} onChange={handleChange} InputProps={{ style: { color: '#000' } }} />
-        <TextField margin="dense" label="CPF" type="text" fullWidth variant="outlined" name="cpf" value={formData.cpf} onChange={handleChange} InputProps={{ style: { color: '#000' } }} />
+        <TextField margin="dense" label="Telefone" type="number" fullWidth variant="outlined" name="telefone" value={formData.telefone} onChange={handleChange} InputProps={{ style: { color: '#000' } }} />
+        <TextField margin="dense" label="CPF" type="number" fullWidth variant="outlined" name="cpf" value={formData.cpf} onChange={handleChange} InputProps={{ style: { color: '#000' } }} />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancelar</Button>

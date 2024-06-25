@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
 import { useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import api from "../api/api";
 
 const StyledCard = styled(Card)({
   height: "calc(100vh - 64px)",
@@ -17,15 +17,17 @@ const StyledCard = styled(Card)({
   backgroundColor: "#f5f5f5",
 });
 
-function ProductList({ products: productsProp }) {
+function ProductList() {
   const [products, setProducts] = useState([]);
   const location = useLocation();
 
   useEffect(() => {
-    const loadProducts = () => {
-      const savedProducts = JSON.parse(localStorage.getItem("products"));
-      if (savedProducts) {
-        setProducts(savedProducts);
+    const loadProducts = async () => {
+      try {
+        const response = await api.get("/products");
+        setProducts(response.data);
+      } catch (error) {
+        console.error("Erro ao carregar produtos:", error);
       }
     };
 
@@ -51,7 +53,7 @@ function ProductList({ products: productsProp }) {
         </Typography>
       </Box>
       <Grid container spacing={2} sx={{ padding: 2 }}>
-        {currentItems.map((product, index) => (
+        {currentItems.map((product) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
             <ProductCard name={product.name} description={product.description} image={product.image} price={product.price} id={product.id} />
           </Grid>
@@ -72,7 +74,7 @@ ProductList.propTypes = {
       image: PropTypes.string,
       price: PropTypes.string,
     })
-  ).isRequired,
+  ),
 };
 
 export default ProductList;

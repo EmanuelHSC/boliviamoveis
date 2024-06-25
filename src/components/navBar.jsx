@@ -127,14 +127,14 @@ export default function NavBar() {
             <HoverableIconButton color="inherit" onClick={handleFavoritesClick}>
               <FavoriteIcon />
             </HoverableIconButton>
-            
-              <Link to="/carrinho" style={{ textDecoration: "none", color: "inherit" }}>
-            <HoverableIconButton color="inherit" onClick={handleCartClick}>
-            <Badge badgeContent={quantityCart ? quantityCart : "0"}>
-  <ShoppingCartIcon />
-</Badge>
-            </HoverableIconButton>
-              </Link>
+
+            <Link to="/carrinho" style={{ textDecoration: "none", color: "inherit" }}>
+              <HoverableIconButton color="inherit" onClick={handleCartClick}>
+                <Badge badgeContent={quantityCart ? quantityCart : "0"}>
+                  <ShoppingCartIcon />
+                </Badge>
+              </HoverableIconButton>
+            </Link>
             <HoverableProfileMenu color="inherit" onClick={handleProfileClick}>
               <PersonIcon />
             </HoverableProfileMenu>

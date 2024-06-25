@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button } from "@mui/material";
 import PropTypes from "prop-types";
+import api from "../api/api";
 
 function LoginModal({ open, onClose, onLogin }) {
   const [email, setEmail] = useState("");
@@ -14,9 +15,21 @@ function LoginModal({ open, onClose, onLogin }) {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = () => {
-    onLogin(email, password);
-    onClose();
+  const handleSubmit = async () => {
+    try {
+      const response = await api.post("/login", {
+        email,
+        password,
+      });
+
+      const { access_token } = response.data;
+      localStorage.setItem("access_token", access_token);
+      onLogin(access_token, email);
+      onClose();
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+      alert("Erro ao fazer login. Verifique suas credenciais e tente novamente.");
+    }
   };
 
   return (
@@ -31,7 +44,7 @@ function LoginModal({ open, onClose, onLogin }) {
           variant="outlined"
           value={email}
           onChange={handleChangeEmail}
-          InputProps={{ style: { color: '#000' } }}
+          InputProps={{ style: { color: "#000" } }}
         />
         <TextField
           margin="dense"
@@ -41,7 +54,7 @@ function LoginModal({ open, onClose, onLogin }) {
           variant="outlined"
           value={password}
           onChange={handleChangePassword}
-          InputProps={{ style: { color: '#000' } }}
+          InputProps={{ style: { color: "#000" } }}
         />
       </DialogContent>
       <DialogActions>

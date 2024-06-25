@@ -3,18 +3,25 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, T
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-import productsList from "../data/products";
+import api from "../api/api";  // Importe sua instância do axios
 
 function AdminPanel() {
-  const [products, setProducts] = useState(JSON.parse(localStorage.getItem("products")) || productsList);
+  const [products, setProducts] = useState([]);
   const [open, setOpen] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("products", JSON.stringify(products));
-    console.log("Products saved to local storage:", products);
-  }, [products]);
+    const loadProducts = async () => {
+      try {
+        const response = await api.get("/products");
+        setProducts(response.data);
+      } catch (error) {
+        console.error("Erro ao carregar produtos:", error);
+      }
+    };
+
+    loadProducts();
+  }, []);
 
   const handleOpen = (product = null) => {
     setCurrentProduct(product ? { ...product } : { name: "", description: "", image: "", price: "" });
@@ -30,19 +37,40 @@ function AdminPanel() {
     setCurrentProduct((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
-    if (currentProduct.id) {
-      setProducts((prev) => prev.map((p) => (p.id === currentProduct.id ? currentProduct : p)));
-    } else {
-      setProducts((prev) => [...prev, { ...currentProduct, id: prev.length + 1 }]);
+  const handleSave = async () => {
+    try {
+      if (currentProduct.id) {
+        // Atualizar produto existente
+        await api.put(`/products/${currentProduct.id}`, {
+          name: currentProduct.name,
+          description: currentProduct.description,
+          image: currentProduct.image,
+          price: parseFloat(currentProduct.price),
+        });
+        setProducts((prev) => prev.map((p) => (p.id === currentProduct.id ? currentProduct : p)));
+      } else {
+        // Adicionar novo produto
+        const response = await api.post("/products", {
+          name: currentProduct.name,
+          description: currentProduct.description,
+          image: currentProduct.image,
+          price: parseFloat(currentProduct.price),
+        });
+        setProducts((prev) => [...prev, response.data]);
+      }
+    } catch (error) {
+      console.error("Erro ao salvar produto:", error);
     }
-    console.log("Products updated:", products); 
     handleClose();
   };
-  
 
-  const handleDelete = (id) => {
-    setProducts((prev) => prev.filter((p) => p.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      await api.delete(`/products/${id}`);
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+    } catch (error) {
+      console.error("Erro ao deletar produto:", error);
+    }
   };
 
   return (
@@ -83,16 +111,16 @@ function AdminPanel() {
       </Table>
 
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{currentProduct?.id ? "Edit Product" : "Add New Product"}</DialogTitle>
+        <DialogTitle>{currentProduct?.id ? "Editar Produto" : "Adicionar Novo Produto"}</DialogTitle>
         <DialogContent>
-          <TextField margin="dense" label="Name" type="text" fullWidth variant="outlined" name="name" value={currentProduct?.name} onChange={handleChange} />
-          <TextField margin="dense" label="Description" type="text" fullWidth variant="outlined" name="description" value={currentProduct?.description} onChange={handleChange} />
-          <TextField margin="dense" label="Image URL" type="text" fullWidth variant="outlined" name="image" value={currentProduct?.image} onChange={handleChange} />
-          <TextField margin="dense" label="Price" type="text" fullWidth variant="outlined" name="price" value={currentProduct?.price} onChange={handleChange} />
+          <TextField margin="dense" label="Nome" type="text" fullWidth variant="outlined" name="name" value={currentProduct?.name} onChange={handleChange} />
+          <TextField margin="dense" label="Descrição" type="text" fullWidth variant="outlined" name="description" value={currentProduct?.description} onChange={handleChange} />
+          <TextField margin="dense" label="URL da Imagem" type="text" fullWidth variant="outlined" name="image" value={currentProduct?.image} onChange={handleChange} />
+          <TextField margin="dense" label="Preço" type="number" fullWidth variant="outlined" name="price" value={currentProduct?.price} onChange={handleChange} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSave}>Save</Button>
+          <Button onClick={handleClose}>Cancelar</Button>
+          <Button onClick={handleSave}>Salvar</Button>
         </DialogActions>
       </Dialog>
     </div>

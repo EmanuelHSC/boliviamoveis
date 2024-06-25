@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button } from "@mui/material";
 import PropTypes from "prop-types";
+import api from "../api/api";
 
-function ResetPasswordModal({ open, onClose, onResetPassword }) {
+function ResetPasswordModal({ open, onClose }) {
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
@@ -14,9 +15,19 @@ function ResetPasswordModal({ open, onClose, onResetPassword }) {
     setNewPassword(event.target.value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (email && newPassword) {
-      onResetPassword(email, newPassword);
+      try {
+        await api.post("/forgot_password", {
+          email: email,
+          password: newPassword,
+        });
+        alert("Senha atualizada com sucesso!");
+        onClose();
+      } catch (error) {
+        console.error("Erro ao resetar a senha:", error);
+        alert("Erro ao resetar a senha. Verifique os dados e tente novamente.");
+      }
     } else {
       alert("Preencha todos os campos");
     }
@@ -40,7 +51,6 @@ function ResetPasswordModal({ open, onClose, onResetPassword }) {
 ResetPasswordModal.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onResetPassword: PropTypes.func.isRequired, // Adicione esta linha
 };
 
 export default ResetPasswordModal;

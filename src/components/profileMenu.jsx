@@ -6,6 +6,8 @@ import LoginModal from "./loginModal";
 import ResetPasswordModal from "./resetPassowordModal";
 import usersData from "../data/users";
 import { Link } from "react-router-dom";
+import { REQUIRE_ADMIN } from "../config/config";
+import api from "../api/api";
 
 function ProfileMenu() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -13,7 +15,6 @@ function ProfileMenu() {
   const [modalOpen, setModalOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [resetPasswordModalOpen, setResetPasswordModalOpen] = useState(false);
-  const [users, setUsers] = useState(usersData);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -23,8 +24,7 @@ function ProfileMenu() {
     setAnchorEl(null);
   };
 
-  //Reset Password
-
+  // Reset Password
   const handleResetPasswordOpen = () => {
     setResetPasswordModalOpen(true);
     handleClose();
@@ -35,14 +35,11 @@ function ProfileMenu() {
   };
 
   const handleResetPassword = (email, newPassword) => {
-    const updatedUsers = users.map((user) => (user.email === email ? { ...user, password: newPassword } : user));
-    setUsers(updatedUsers);
-    console.log("Senha alterada para o usuário:", email);
+    // Lógica para resetar a senha usando a API pode ser adicionada aqui
     handleResetPasswordClose();
   };
 
-  //Login
-
+  // Login
   const handleLoginOpen = () => {
     setLoginModalOpen(true);
     handleClose();
@@ -52,21 +49,21 @@ function ProfileMenu() {
     setLoginModalOpen(false);
   };
 
-  const handleLogin = (email, password) => {
-    const userFound = users.find((u) => u.email === email);
-
-    if (!userFound) {
-      alert("Este e-mail não existe.");
-    } else if (userFound.password !== password) {
-      alert("Você errou sua senha, tente novamente ou resete sua senha.");
-    } else {
-      setUser({ isLoggedIn: true, name: userFound.name, isAdmin: userFound.isAdmin });
-      handleLoginClose();
+  const handleLogin = async (token, email) => {
+    try {
+      const response = await api.get("/users");
+      const users = response.data;
+      const loggedInUser = users.find((user) => user.email === email);
+      if (loggedInUser) {
+        setUser({ isLoggedIn: true, name: loggedInUser.name, isAdmin: loggedInUser.is_admin });
+      }
+      localStorage.setItem("access_token", token);
+    } catch (error) {
+      console.error("Erro ao obter usuários:", error);
     }
   };
 
-  //Register
-
+  // Register
   const handleRegisterOpen = () => {
     setModalOpen(true);
     handleClose();
@@ -76,17 +73,16 @@ function ProfileMenu() {
     setModalOpen(false);
   };
 
-  const handleRegister = (newUser) => {
-    const updatedUsers = [...users, { ...newUser, id: users.length + 1 }];
-    setUsers(updatedUsers);
+  const handleRegister = (token) => {
+    setUser({ isLoggedIn: true, name: "Usuário", isAdmin: false });
+    localStorage.setItem("access_token", token);
     handleRegisterClose();
-    console.log("Usuários atualizados:", updatedUsers);
   };
 
-  //logout
-
+  // Logout
   const handleLogout = () => {
     setUser({ isLoggedIn: false, name: "Usuário", isAdmin: false });
+    localStorage.removeItem("access_token");
   };
 
   return (
@@ -100,12 +96,19 @@ function ProfileMenu() {
             <MenuItem onClick={handleLogout} sx={{ minHeight: "4rem" }} style={{ fontSize: "1rem", color: "black" }}>
               Sair
             </MenuItem>
-            {user.isAdmin && (
-              <MenuItem sx={{ minHeight: "4rem" }} style={{ fontSize: "1rem", color: "black" }}>
-                <Link to="/admin" style={{ textDecoration: "none", color: "inherit" }}>
-                  Painel Admin
-                </Link>
-              </MenuItem>
+            {(!REQUIRE_ADMIN || user.isAdmin) && (
+              <>
+                <MenuItem sx={{ minHeight: "4rem" }} style={{ fontSize: "1rem", color: "black" }}>
+                  <Link to="/admin" style={{ textDecoration: "none", color: "inherit" }}>
+                    Painel Admin
+                  </Link>
+                </MenuItem>
+                <MenuItem sx={{ minHeight: "4rem" }} style={{ fontSize: "1rem", color: "black" }}>
+                  <Link to="/users" style={{ textDecoration: "none", color: "inherit" }}>
+                    Administração de Usuários
+                  </Link>
+                </MenuItem>
+              </>
             )}
           </>
         ) : (

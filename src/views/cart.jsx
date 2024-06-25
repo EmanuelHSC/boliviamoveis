@@ -1,17 +1,19 @@
+import React, { useState, useCallback } from "react";
 import Typography from "@mui/material/Typography";
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import CartItem from '../components/CartItem';
 import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import { useSelector } from 'react-redux';
-import { useCallback } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import CartItem from '../components/CartItem';
+import { Creators as CartActions } from '../store/ducks/cart';
+import CheckoutModal from '../components/checkoutModal';
 
 export default function Cart() {
     const cart = useSelector((state) => state.cart);
-    console.log("Carrinho: ", cart);
+    const dispatch = useDispatch();
+    const [checkoutOpen, setCheckoutOpen] = useState(false);
 
     const renderItem = useCallback((item) => (
         <>
@@ -27,7 +29,12 @@ export default function Cart() {
                 {cart.total.toFixed(2)}
             </Typography>
             </Typography>
-    )
+    );
+
+    const handleCheckout = () => {
+        dispatch(CartActions.checkoutSuccess());
+        alert('Compra realizada com sucesso!');
+    };
 
     return (
         <Container maxWidth="lg" sx={{ maxHeight: 'fit-content' }}>
@@ -44,12 +51,16 @@ export default function Cart() {
                     <Grid item xs={4}>
                         <Box sx={{ m: 2, p: 2 }} bgcolor={"#f5f5f5"}>
                             { subtotal() }
-                            <Button>Fechar pedido</Button>
+                            <Button variant="contained" color="primary" onClick={() => setCheckoutOpen(true)}>Fechar pedido</Button>
                         </Box>
                     </Grid>
                 </Grid>
             </Box>
+            <CheckoutModal 
+                open={checkoutOpen} 
+                onClose={() => setCheckoutOpen(false)} 
+                onCheckout={handleCheckout} 
+            />
         </Container>
-    )
+    );
 }
-

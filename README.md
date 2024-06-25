@@ -30,11 +30,11 @@ Este é um projeto desenvolvido para a disciplina de Desenvolvimento Web da facu
 
 1. Clone o repositório
    ```bash
-   git clone <URL do repositório>
+   git clone https://github.com/EmanuelHSC/boliviamoveis.git
    ```
 2. Navegue até o diretório do frontend
    ```bash
-   cd frontend
+   cd <diretorio>
    ```
 3. Instale as dependências
    ```bash

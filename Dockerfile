@@ -1,29 +1,34 @@
-# Use uma imagem do Node.js como base
-FROM node:16-alpine AS build
+# Etapa 1: Construção do projeto
+FROM node:14 AS build
 
-# Defina o diretório de trabalho
+# Defina o diretório de trabalho dentro do contêiner
 WORKDIR /app
 
-# Copie os arquivos do projeto para o contêiner
-COPY package.json ./
-COPY package-lock.json ./
+# Copie o package.json e o yarn.lock/package-lock.json
+COPY package*.json ./
 
-# Instale as dependências
+# Instale as dependências do projeto
 RUN npm install
 
-# Copie todo o código-fonte do projeto
+# Copie o restante do código do projeto
 COPY . .
 
-# Faça o build do projeto
+# Execute o build da aplicação
 RUN npm run build
 
-# Use uma imagem do Nginx como base para servir os arquivos estáticos
+# Etapa 2: Configuração do servidor web
 FROM nginx:alpine
 
-# Copie os arquivos construídos para o diretório padrão do Nginx
-COPY --from=build /app/build /usr/share/nginx/html
+# Remova a configuração padrão do Nginx
+RUN rm /etc/nginx/conf.d/default.conf
 
-# Exponha a porta 80
+# Copie a nova configuração do Nginx
+COPY nginx.conf /etc/nginx/conf.d
+
+# Copie os arquivos buildados para a pasta padrão do Nginx
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Exponha a porta que o Nginx irá rodar
 EXPOSE 80
 
 # Comando para rodar o Nginx

@@ -1,17 +1,30 @@
-# Specify the Node.js image to use for the build process
-FROM node:16 as build
+# Use uma imagem do Node.js como base
+FROM node:16-alpine AS build
 
-# Set the working directory in the Docker image
+# Defina o diretório de trabalho
 WORKDIR /app
 
-# Copy package.json and package-lock.json (or yarn.lock) to Docker image
-COPY package.json package-lock.json ./
+# Copie os arquivos do projeto para o contêiner
+COPY package.json ./
+COPY package-lock.json ./
 
-# Install project dependencies
+# Instale as dependências
 RUN npm install
 
-# Copy the rest of your app's source code from your host to your image filesystem.
+# Copie todo o código-fonte do projeto
 COPY . .
 
-# Build the React application
-RUN npm run build
+# Faça o build do projeto
+RUN npm run build
+
+# Use uma imagem do Nginx como base para servir os arquivos estáticos
+FROM nginx:alpine
+
+# Copie os arquivos construídos para o diretório padrão do Nginx
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Exponha a porta 80
+EXPOSE 80
+
+# Comando para rodar o Nginx
+CMD ["nginx", "-g", "daemon off;"]

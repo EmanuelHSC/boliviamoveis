@@ -3,6 +3,21 @@
 
 Este é um projeto desenvolvido para a disciplina de Desenvolvimento Web da faculdade. O objetivo do projeto é criar um sistema de gerenciamento de produtos e usuários utilizando React para o frontend e uma API Flask para o backend. 
 
+## Links para avaliação
+
+### Sonar
+   ```bash
+   https://sonarcloud.io/summary/new_code?id=EmanuelHSC_boliviamoveis&branch=master
+   ```
+### Analise do projeto
+   ```bash
+   https://docs.google.com/document/d/1AZVl_Q4hy1Ir8vCDW3SGxeT5K4hf-fQ1C3T9rUohGqA/edit
+   ```
+### BackEnd
+   ```bash
+   https://github.com/GuilhermeFiorot/boliviamoveisbackend
+   ```
+
 ## Funcionalidades
 
 - **Autenticação de Usuários**: Login e registro de usuários com verificação de permissões administrativas.

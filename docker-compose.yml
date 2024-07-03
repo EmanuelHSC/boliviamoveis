@@ -12,7 +12,7 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/boliviamoveis
+      - DATABASE_URL=postgres://postgres:${POSTGRES_PASSWORD}@db:5432/boliviamoveis
       - DEBUG=1
       - SECRET_KEY=django-insecure-#(3^z1
       
